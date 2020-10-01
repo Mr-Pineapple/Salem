@@ -3,7 +3,7 @@
   "id": "salem",
   "version": "${version}",
   "name": "Salem",
-  "description": "A mod to add spellcasting and witchery to Minecraft, created for the FallFest (MiniFest/ModFest) of 2020 by programmers Mr. Pineapple, Xero, Sindarin and artist ilja615.",
+  "description": "Adds spellcasting and witchery. Created for FallFest 2020.\nMade by programmers Mr. Pineapple, Xero, Sindarin and artist ilja615.",
   "authors": [
     "Xero",
 	"ilja615",
