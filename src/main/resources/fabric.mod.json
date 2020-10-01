@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "salem",
+  "version": "${version}",
+
+  "name": "Salem",
+  "description": "Magic Witch mod created for the FallFest Modfest",
+  "authors": [
+    "Mr. Pineapple",
+	"Xero/Xerousso",
+	"Ilja615",
+	"Sindarin"
+  ],
+  "contact": {
+    "sources": "https://github.com/Mr-Pineapple/Salem"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/salem/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "club.mcmodding.salem.Salem"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
