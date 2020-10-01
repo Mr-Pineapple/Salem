@@ -6,4 +6,5 @@ public class Salem implements ModInitializer {
 
     @Override
     public void onInitialize() {}
+
 }

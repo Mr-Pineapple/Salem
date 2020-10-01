@@ -2,35 +2,35 @@
   "schemaVersion": 1,
   "id": "salem",
   "version": "${version}",
-
   "name": "Salem",
-  "description": "Magic Witch mod created for the FallFest Modfest",
+  "description": "A mod to add spellcasting and witchery to Minecraft, created for the FallFest (MiniFest/ModFest) of 2020 by programmers Mr. Pineapple, Xero, Sindarin and artist ilja615.",
   "authors": [
-    "Mr. Pineapple",
-	"Xero/Xerousso",
-	"Ilja615",
-	"Sindarin"
+    "Xero",
+	"ilja615",
+	"Sindarin",
+	"Pineapple"
   ],
   "contact": {
+    "issues": "https://github.com/Mr-Pineapple/Salem/issues",
     "sources": "https://github.com/Mr-Pineapple/Salem"
   },
-
-  "license": "CC0-1.0",
+  "license": "CC BY-NC-SA 4.0",
   "icon": "assets/salem/icon.png",
-
   "environment": "*",
   "entrypoints": {
+    "client": [
+      "club.mcmodding.salem.client.SalemClient"
+    ],
     "main": [
       "club.mcmodding.salem.Salem"
     ]
   },
-
+  "mixins": [
+    "salem.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
-  },
-  "suggests": {
-    "flamingo": "*"
+    "minecraft": "1.16.3"
   }
 }
