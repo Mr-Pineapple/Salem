@@ -1,4 +1,4 @@
-package club.mcmodding.salem;
+package club.mcmodding.salem.items;
 
 import club.mcmodding.salem.spells.Spell;
 import club.mcmodding.salem.spells.SpellRegistry;
@@ -17,7 +17,7 @@ import net.minecraft.util.hit.HitResult;
  * {@link Spell}s, a certain amount of 'energy', and a spell capacity and energy capacity.  Custom spell casting items can contain
  * custom logic to determine how much power to give each {@link Spell} based on the stats given to the particular spell casting item.
  */
-public abstract class SpellCastingItem extends Item {
+public class SpellCastingItem extends Item {
 
     private int capacity = 8;
     private float energyCapacity = 1000f;
@@ -49,7 +49,7 @@ public abstract class SpellCastingItem extends Item {
 
     /** Add the {@link Spell} to the spells that the spell casting item stack contains and are available for use. */
     public void addSpell(ItemStack stack, Spell spell) {
-        ((ListTag) getOrCreateTag(stack).get("spell_list")).add(StringTag.of(SpellRegistry.SPELL_TYPE.getId(spell).toString()));
+        ((ListTag) getOrCreateTag(stack).get("spell_list")).add(StringTag.of(SpellRegistry.SPELL.getId(spell).toString()));
     }
 
     /**
@@ -58,7 +58,7 @@ public abstract class SpellCastingItem extends Item {
      */
     public boolean removeSpell(ItemStack stack, Spell spell) {
         try {
-            return ((ListTag) getOrCreateTag(stack).get("spell_list")).remove(StringTag.of(SpellRegistry.SPELL_TYPE.getId(spell).toString()));
+            return ((ListTag) getOrCreateTag(stack).get("spell_list")).remove(StringTag.of(SpellRegistry.SPELL.getId(spell).toString()));
         } catch (NullPointerException npe) {
             return false;
         }
@@ -112,7 +112,9 @@ public abstract class SpellCastingItem extends Item {
     }
 
     /**  Calculate the amount of power given to the {@link Spell}.  Minimum is {@code 1f}, normal is {@code} 5f, maximum is {@code 9f}.*/
-    protected abstract float getPower(ItemStack stack, Spell spell);
+    protected float getPower(ItemStack stack, Spell spell) {
+        return 5f;
+    }
 
     /**
      * Executes the selected {@link Spell}'s {@code execute} method with {@link SpellCastingItem#getPower(ItemStack, Spell)} power.
@@ -125,7 +127,7 @@ public abstract class SpellCastingItem extends Item {
         ListTag listTag = (ListTag) tag.get("spell_list");
 
         Spell spell = null;
-        if (listTag != null && listTag.size() > 0) spell = SpellRegistry.SPELL_TYPE.get(new Identifier(listTag.getString(tag.getInt("selected_spell_index"))));
+        if (listTag != null && listTag.size() > 0) spell = SpellRegistry.SPELL.get(new Identifier(listTag.getString(tag.getInt("selected_spell_index"))));
 
         if (spell != null && canUse(spell) && spell.execute(entity, raycastHitResult, spellCastingItem, Util.clamp(getPower(spellCastingItem, spell), 1f, 9f))) {
             removeEnergy(spellCastingItem, spell.simulateEnergyUsage(entity, raycastHitResult, spellCastingItem,
