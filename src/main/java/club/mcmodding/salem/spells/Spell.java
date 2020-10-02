@@ -41,7 +41,9 @@ public interface Spell {
      *                          of {@code 5f}. Override {@link Spell#getBaselineEnergyUse} to change this.
      * @return The amount of energy used by the {@link Spell}.
      */
-    float simulateEnergyUsage(LivingEntity entity, HitResult raycastHitResult, ItemStack spellCastingItem, float power, float baselineEnergyUse);
+    default float simulateEnergyUsage(LivingEntity entity, HitResult raycastHitResult, ItemStack spellCastingItem, float power, float baselineEnergyUse) {
+        return (power / 4.5f) - 0.5f;
+    }
 
     /** The baseline energy usage of the {@link Spell}, under normal conditions, with a {@code power} of {@code 5f}. */
     default float getBaselineEnergyUse() {
@@ -55,8 +57,5 @@ public interface Spell {
     default SpellType getSpellType() {
         return SpellType.MISCELLANEOUS;
     }
-
-    CompoundTag serialize();
-    void deserialize(CompoundTag tag);
 
 }

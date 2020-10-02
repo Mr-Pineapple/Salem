@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 
@@ -48,7 +49,7 @@ public abstract class SpellCastingItem extends Item {
 
     /** Add the {@link Spell} to the spells that the spell casting item stack contains and are available for use. */
     public void addSpell(ItemStack stack, Spell spell) {
-        ((ListTag) getOrCreateTag(stack).get("spell_list")).add(spell.serialize());
+        ((ListTag) getOrCreateTag(stack).get("spell_list")).add(StringTag.of(SpellRegistry.SPELL_TYPE.getId(spell).toString()));
     }
 
     /**
@@ -57,7 +58,7 @@ public abstract class SpellCastingItem extends Item {
      */
     public boolean removeSpell(ItemStack stack, Spell spell) {
         try {
-            return ((ListTag) getOrCreateTag(stack).get("spell_list")).remove(spell.serialize());
+            return ((ListTag) getOrCreateTag(stack).get("spell_list")).remove(StringTag.of(SpellRegistry.SPELL_TYPE.getId(spell).toString()));
         } catch (NullPointerException npe) {
             return false;
         }
@@ -124,7 +125,7 @@ public abstract class SpellCastingItem extends Item {
         ListTag listTag = (ListTag) tag.get("spell_list");
 
         Spell spell = null;
-        if (listTag != null) spell = SpellRegistry.SPELL_TYPE.get(new Identifier(listTag.getString(tag.getInt("selected_spell_index"))));
+        if (listTag != null && listTag.size() > 0) spell = SpellRegistry.SPELL_TYPE.get(new Identifier(listTag.getString(tag.getInt("selected_spell_index"))));
 
         if (spell != null && canUse(spell) && spell.execute(entity, raycastHitResult, spellCastingItem, Util.clamp(getPower(spellCastingItem, spell), 1f, 9f))) {
             removeEnergy(spellCastingItem, spell.simulateEnergyUsage(entity, raycastHitResult, spellCastingItem,
