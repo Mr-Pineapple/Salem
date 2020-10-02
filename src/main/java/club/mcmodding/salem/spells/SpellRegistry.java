@@ -5,6 +5,7 @@ import com.mojang.serialization.Lifecycle;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.registry.*;
@@ -30,6 +31,16 @@ public class SpellRegistry {
             @Override
             public SpellType getSpellType() {
                 return SpellType.FIRE;
+            }
+
+            @Override
+            public CompoundTag serialize() {
+                return null;
+            }
+
+            @Override
+            public void deserialize(CompoundTag tag) {
+
             }
         });
     }
