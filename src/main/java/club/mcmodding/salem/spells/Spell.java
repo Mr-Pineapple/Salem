@@ -41,21 +41,15 @@ public interface Spell {
      *                          of {@code 5f}. Override {@link Spell#getBaselineEnergyUse} to change this.
      * @return The amount of energy used by the {@link Spell}.
      */
-    default float simulateEnergyUsage(LivingEntity entity, HitResult raycastHitResult, ItemStack spellCastingItem, float power, float baselineEnergyUse) {
-        return (power / 4.5f) - 0.5f;
-    }
+    float simulateEnergyUsage(LivingEntity entity, HitResult raycastHitResult, ItemStack spellCastingItem, float power, float baselineEnergyUse);
 
     /** The baseline energy usage of the {@link Spell}, under normal conditions, with a {@code power} of {@code 5f}. */
-    default float getBaselineEnergyUse() {
-        return 2f;
-    }
+    float getBaselineEnergyUse();
 
     /**
      * The {@link SpellType} of this spell. May be used in certain spell casting items to determine how much power to
      * give, or whether to execute this {@link Spell} in the first place.  Also used to color the {@link Spell} icon.
      */
-    default SpellType getSpellType() {
-        return SpellType.MISCELLANEOUS;
-    }
+    SpellType getSpellType();
 
 }

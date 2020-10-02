@@ -28,6 +28,16 @@ public class SpellRegistry {
         }
 
         @Override
+        public float simulateEnergyUsage(LivingEntity entity, HitResult raycastHitResult, ItemStack spellCastingItem, float power, float baselineEnergyUse) {
+            return (power / 4.5f) - 0.5f;
+        }
+
+        @Override
+        public float getBaselineEnergyUse() {
+            return 2f;
+        }
+
+        @Override
         public SpellType getSpellType() {
             return SpellType.FIRE;
         }
