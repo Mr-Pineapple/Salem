@@ -1,6 +1,7 @@
 package club.mcmodding.salem.blocks.spell_cauldron;
 
 import club.mcmodding.salem.blocks.Screens;
+import club.mcmodding.salem.util.HideableSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -29,8 +30,8 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
         addSlot(new Slot(inventory, 0, 44, 138));
         addSlot(new Slot(inventory, 1, 174, 44));
 
-        for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i + 2 , 102 + 18 * i, 18));
-        for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i + 11, 102 + 18 * i, 70));
+        for (int i = 0; i < 9; i++) addSlot(new HideableSlot(inventory, i + 2 , 102 + 18 * i, 18, false));
+        for (int i = 0; i < 9; i++) addSlot(new HideableSlot(inventory, i + 11, 102 + 18 * i, 70, false));
 
         layoutPlayerInventory(playerInventory, 102, 92);
     }

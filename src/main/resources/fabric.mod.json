@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "club.mcmodding.salem.client.SalemClient"
+      "club.mcmodding.salem.SalemClient"
     ],
     "main": [
       "club.mcmodding.salem.Salem"

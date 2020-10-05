@@ -1,4 +1,4 @@
-package club.mcmodding.salem.client;
+package club.mcmodding.salem;
 
 import club.mcmodding.salem.blocks.Screens;
 import net.fabricmc.api.ClientModInitializer;

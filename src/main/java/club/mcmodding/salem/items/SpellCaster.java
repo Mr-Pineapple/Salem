@@ -107,7 +107,7 @@ public interface SpellCaster {
     }
 
     /** Get the {@code stack}'s compound nbt tag if present, otherwise create and fill one. */
-    default CompoundTag getOrCreateTag(ItemStack stack) {
+    static CompoundTag getOrCreateTag(ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag != null) return tag;
         tag = new CompoundTag();
