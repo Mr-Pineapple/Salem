@@ -1,6 +1,9 @@
 package club.mcmodding.salem.blocks.spell_cauldron;
 
 import club.mcmodding.salem.blocks.Screens;
+import club.mcmodding.salem.items.SpellCaster;
+import club.mcmodding.salem.items.SpellCasterInventory;
+import club.mcmodding.salem.items.SpellCasterUtil;
 import club.mcmodding.salem.util.HideableSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -13,6 +16,8 @@ import net.minecraft.screen.slot.Slot;
 public class SpellCauldronScreenHandler extends ScreenHandler {
 
     private final Inventory inventory;
+    private final SpellCasterInventory spellCasterInventory = new SpellCasterInventory();
+
     private final PlayerInventory playerInventory;
 
     public SpellCauldronScreenHandler(int syncID, PlayerInventory playerInventory) {
@@ -27,7 +32,23 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
         this.playerInventory = playerInventory;
         inventory.onOpen(playerInventory.player);
 
-        addSlot(new Slot(inventory, 0, 44, 138));
+        addSlot(new Slot(inventory, 0, 44, 138) {
+            @Override
+            public void onStackChanged(ItemStack originalItem, ItemStack itemStack) {
+                super.onStackChanged(originalItem, itemStack);
+
+                if (originalItem.getItem() instanceof SpellCaster) {
+                    SpellCasterUtil.getOrCreateTag(originalItem).put("inventory", spellCasterInventory.serialize());
+                    spellCasterInventory.clear();
+                }
+
+                if (itemStack.getItem() instanceof SpellCaster) {
+                    if (SpellCasterUtil.getOrCreateTag(itemStack).get("inventory") != null) {
+                        spellCasterInventory.deserialize(SpellCasterUtil.getOrCreateTag(itemStack).getCompound("inventory"));
+                    }
+                }
+            }
+        });
         addSlot(new Slot(inventory, 1, 174, 44));
 
         for (int i = 0; i < 9; i++) addSlot(new HideableSlot(inventory, i + 2 , 102 + 18 * i, 18, false));
