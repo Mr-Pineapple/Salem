@@ -74,4 +74,14 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
         for (int m = 0; m < 9; ++m) this.addSlot(new Slot(playerInventory, m, x + m * 18, y + 58));
     }
 
+    @Override
+    public void close(PlayerEntity player) {
+        super.close(player);
+    }
+
+    @Override
+    public void onContentChanged(Inventory inventory) {
+        super.onContentChanged(inventory);
+    }
+
 }
