@@ -82,6 +82,7 @@ public class SpellCasterUtil {
         CompoundTag tag = stack.getTag();
         if (tag != null) return tag;
         tag = new CompoundTag();
+        stack.setTag(tag);
 
         tag.put("spell_list", new ListTag());
         tag.putInt("selected_spell_index", 0);
