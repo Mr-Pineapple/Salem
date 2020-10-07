@@ -36,7 +36,6 @@ public class SpellCauldronInventory implements Inventory {
     public ItemStack removeStack(int slot) {
         ItemStack stack = INVENTORY.getStackCopy(slot);
         INVENTORY.setStack(slot, ItemStack.EMPTY);
-        System.out.println(stack);
         return stack;
     }
 

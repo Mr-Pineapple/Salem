@@ -36,14 +36,12 @@ public class SpellCasterInventory implements Inventory {
     public ItemStack removeStack(int slot) {
         ItemStack stack = INVENTORY.getStackCopy(slot);
         INVENTORY.setStack(slot, ItemStack.EMPTY);
-        System.out.println(stack);
         return stack;
     }
 
     @Override
     public void setStack(int slot, ItemStack stack) {
         INVENTORY.setStack(slot, stack);
-        SpellCaster.getOrCreateTag(stack).put("inventory", serialize());
     }
 
     @Override

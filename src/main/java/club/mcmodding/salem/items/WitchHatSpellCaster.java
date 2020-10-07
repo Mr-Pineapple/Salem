@@ -45,20 +45,4 @@ public class WitchHatSpellCaster extends Item implements SpellCaster {
         return 5f;
     }
 
-    @Override
-    public CompoundTag getOrCreateTag(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag != null) return tag;
-        tag = new CompoundTag();
-
-        tag.put("spell_list", new ListTag());
-        tag.putInt("selected_spell_index", 0);
-        tag.putFloat("energy", 0f);
-
-        ((ListTag) tag.get("spell_list")).add(StringTag.of(SpellRegistry.SPELL.getId(SpellRegistry.FIREBALL_SPELL).toString()));
-
-        return tag;
-
-    }
-
 }

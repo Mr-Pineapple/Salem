@@ -34,13 +34,29 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
 
         addSlot(new Slot(inventory, 0, 44, 138) {
             @Override
-            public void onStackChanged(ItemStack originalItem, ItemStack itemStack) {
-                super.onStackChanged(originalItem, itemStack);
-
-                if (originalItem.getItem() instanceof SpellCaster) {
-                    SpellCasterUtil.getOrCreateTag(originalItem).put("inventory", spellCasterInventory.serialize());
+            public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
+                if (stack.getItem() instanceof SpellCaster) {
+                    SpellCasterUtil.getOrCreateTag(stack).put("inventory", spellCasterInventory.serialize());
                     spellCasterInventory.clear();
                 }
+
+                return super.onTakeItem(player, stack);
+            }
+
+            @Override
+            public void setStack(ItemStack stack) {
+                super.setStack(stack);
+
+                if (stack.getItem() instanceof SpellCaster) {
+                    if (SpellCasterUtil.getOrCreateTag(stack).get("inventory") != null) {
+                        spellCasterInventory.deserialize(SpellCasterUtil.getOrCreateTag(stack).getCompound("inventory"));
+                    }
+                }
+            }
+
+            @Override
+            public void onStackChanged(ItemStack originalItem, ItemStack itemStack) {
+                super.onStackChanged(originalItem, itemStack);
 
                 if (itemStack.getItem() instanceof SpellCaster) {
                     if (SpellCasterUtil.getOrCreateTag(itemStack).get("inventory") != null) {
@@ -51,8 +67,14 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
         });
         addSlot(new Slot(inventory, 1, 174, 44));
 
-        for (int i = 0; i < 9; i++) addSlot(new HideableSlot(inventory, i + 2 , 102 + 18 * i, 18, false));
-        for (int i = 0; i < 9; i++) addSlot(new HideableSlot(inventory, i + 11, 102 + 18 * i, 70, false));
+        for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i + 2 , 102 + 18 * i, 18));
+        for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i + 11, 102 + 18 * i, 70));
+
+        for (int j = 0; j < 6; j++) {
+            for (int i = 0; i < 5; i++) {
+                addSlot(new HideableSlot(spellCasterInventory, (j * 5) + i, 8 + 18 * i, 18 + 18 * j));
+            }
+        }
 
         layoutPlayerInventory(playerInventory, 102, 92);
     }
