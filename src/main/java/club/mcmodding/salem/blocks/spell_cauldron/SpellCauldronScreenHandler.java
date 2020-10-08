@@ -10,7 +10,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 
 public class SpellCauldronScreenHandler extends ScreenHandler {
@@ -36,7 +35,7 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
             @Override
             public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
                 if (stack.getItem() instanceof SpellCaster) {
-                    SpellCasterUtil.getOrCreateTag(stack).put("inventory", spellCasterInventory.serialize());
+                    SpellCasterUtil.getOrPopulateTag(stack).put("inventory", spellCasterInventory.serialize());
                     spellCasterInventory.clear();
                 }
 
@@ -48,8 +47,8 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
                 super.setStack(stack);
 
                 if (stack.getItem() instanceof SpellCaster) {
-                    if (SpellCasterUtil.getOrCreateTag(stack).get("inventory") != null) {
-                        spellCasterInventory.deserialize(SpellCasterUtil.getOrCreateTag(stack).getCompound("inventory"));
+                    if (SpellCasterUtil.getOrPopulateTag(stack).get("inventory") != null) {
+                        spellCasterInventory.deserialize(SpellCasterUtil.getOrPopulateTag(stack).getCompound("inventory"));
                     }
                 }
             }
@@ -59,8 +58,8 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
                 super.onStackChanged(originalItem, itemStack);
 
                 if (itemStack.getItem() instanceof SpellCaster) {
-                    if (SpellCasterUtil.getOrCreateTag(itemStack).get("inventory") != null) {
-                        spellCasterInventory.deserialize(SpellCasterUtil.getOrCreateTag(itemStack).getCompound("inventory"));
+                    if (SpellCasterUtil.getOrPopulateTag(itemStack).get("inventory") != null) {
+                        spellCasterInventory.deserialize(SpellCasterUtil.getOrPopulateTag(itemStack).getCompound("inventory"));
                     }
                 }
             }

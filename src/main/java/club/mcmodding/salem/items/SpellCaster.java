@@ -7,7 +7,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 
@@ -35,7 +34,7 @@ public interface SpellCaster {
      * @param spellCastingItem The {@link ItemStack} used to cast this {@link Spell}.
      */
     default void execute(LivingEntity entity, HitResult raycastHitResult, ItemStack spellCastingItem) {
-        CompoundTag tag = SpellCasterUtil.getOrCreateTag(spellCastingItem);
+        CompoundTag tag = SpellCasterUtil.getOrPopulateTag(spellCastingItem);
         ListTag listTag = (ListTag) tag.get("spell_list");
 
         Spell spell = null;

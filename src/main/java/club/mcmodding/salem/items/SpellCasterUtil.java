@@ -12,7 +12,7 @@ public class SpellCasterUtil {
 
     /** Add the {@link Spell} to the spells that the spell casting item stack contains and are available for use. */
     public static void addSpell(ItemStack stack, Spell spell) {
-        ((ListTag) getOrCreateTag(stack).get("spell_list")).add(StringTag.of(SpellRegistry.SPELL.getId(spell).toString()));
+        ((ListTag) getOrPopulateTag(stack).get("spell_list")).add(StringTag.of(SpellRegistry.SPELL.getId(spell).toString()));
     }
 
     /**
@@ -21,7 +21,7 @@ public class SpellCasterUtil {
      */
     public static boolean removeSpell(ItemStack stack, Spell spell) {
         try {
-            return ((ListTag) getOrCreateTag(stack).get("spell_list")).remove(StringTag.of(SpellRegistry.SPELL.getId(spell).toString()));
+            return ((ListTag) getOrPopulateTag(stack).get("spell_list")).remove(StringTag.of(SpellRegistry.SPELL.getId(spell).toString()));
         } catch (NullPointerException npe) {
             return false;
         }
@@ -33,7 +33,7 @@ public class SpellCasterUtil {
      */
     public static boolean removeSpell(ItemStack stack, int index) {
         try {
-            return ((ListTag) getOrCreateTag(stack).get("spell_list")).remove(index) != null;
+            return ((ListTag) getOrPopulateTag(stack).get("spell_list")).remove(index) != null;
         } catch (NullPointerException npe) {
             return false;
         }
@@ -48,7 +48,7 @@ public class SpellCasterUtil {
         if (stack.getItem() instanceof SpellCaster) spellCaster = (SpellCaster) stack.getItem();
         else return false;
 
-        CompoundTag tag = getOrCreateTag(stack);
+        CompoundTag tag = getOrPopulateTag(stack);
         float currentEnergy = tag.getFloat("energy");
 
         if (currentEnergy >= energy) {
@@ -69,7 +69,7 @@ public class SpellCasterUtil {
         if (stack.getItem() instanceof SpellCaster) spellCaster = (SpellCaster) stack.getItem();
         else return energy;
 
-        CompoundTag tag = getOrCreateTag(stack);
+        CompoundTag tag = getOrPopulateTag(stack);
         float currentEnergy = tag.getFloat("energy");
 
         if (!simulate) tag.putFloat("energy", Util.clamp(currentEnergy + energy, 0f, spellCaster.getEnergyCapacity()));
@@ -78,14 +78,14 @@ public class SpellCasterUtil {
     }
 
     /** Get the {@code stack}'s compound nbt tag if present, otherwise create and fill one. */
-    public static CompoundTag getOrCreateTag(ItemStack stack) {
+    public static CompoundTag getOrPopulateTag(ItemStack stack) {
         CompoundTag tag = stack.getTag();
-        if (tag != null) return tag;
+        if (tag != null && tag.contains("inventory") && tag.contains("energy") && tag.contains("index")) return tag;
         tag = new CompoundTag();
         stack.setTag(tag);
 
-        tag.put("spell_list", new ListTag());
-        tag.putInt("selected_spell_index", 0);
+        tag.put("inventory", new CompoundTag());
+        tag.putInt("index", 0);
         tag.putFloat("energy", 0f);
 
         return tag;

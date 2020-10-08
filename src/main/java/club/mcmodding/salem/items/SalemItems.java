@@ -13,7 +13,14 @@ import java.util.function.Supplier;
 
 public class SalemItems {
 
-    public static final Item WITCH_HAT = registerItem(new WitchHatSpellCaster(new FabricItemSettings().group(ItemGroup.FOOD)), "witch_hat");
+    public static final ItemGroup SALEM_GROUP = registerItemGroup("salem", new Supplier<ItemStack>() {
+        @Override
+        public ItemStack get() {
+            return new ItemStack(WITCH_HAT);
+        }
+    });
+
+    public static final Item WITCH_HAT = registerItem(new WitchHatSpellCaster(new FabricItemSettings().group(SALEM_GROUP)), "witch_hat");
 
     private static Item registerItem(Item item, String name) {
         return Registry.register(Registry.ITEM, new Identifier(Salem.MOD_ID, name), item);
