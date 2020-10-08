@@ -2,15 +2,23 @@ package club.mcmodding.salem.items;
 
 import club.mcmodding.salem.spells.Spell;
 import club.mcmodding.salem.spells.SpellRegistry;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class WitchHatSpellCaster extends Item implements SpellCaster {
 
@@ -23,6 +31,24 @@ public class WitchHatSpellCaster extends Item implements SpellCaster {
         execute(user, user.raycast(32d, 1f, false), user.getStackInHand(hand));
 
         return super.use(world, user, hand);
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
+
+        float energy = SpellCasterUtil.getEnergy(stack);
+        int progress = (int) ((250f / getEnergyCapacity()) * 10);
+
+        StringBuilder energyText = new StringBuilder();
+
+        for (int i = 0; i < 10; i++) {
+            if (i < progress) energyText.append("▓");
+            else energyText.append("░");
+        }
+
+        tooltip.add(new TranslatableText("tooltip.salem.spell_caster.energy").setStyle(Style.EMPTY.withColor(Formatting.RED)));
+        tooltip.add(new LiteralText(energyText.toString() + " (" + (int) 250f + "/" + (int) getEnergyCapacity() + ")").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
     }
 
     @Override

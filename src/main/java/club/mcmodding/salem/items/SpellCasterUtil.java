@@ -39,6 +39,10 @@ public class SpellCasterUtil {
         }
     }
 
+    public static float getEnergy(ItemStack stack) {
+        return stack.getItem() instanceof SpellCaster ? getOrCreateTag(stack).getFloat("energy") : 0f;
+    }
+
     /**
      * Removes {@code energy} amount of energy from the {@code stack}.
      * @return Whether the spell casting item stack had enough energy and was able to remove {@code energy} amount of energy.

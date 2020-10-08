@@ -5,5 +5,7 @@
   "block.salem.spell_cauldron": "Spell Cauldron",
 
   "gui.salem.spell_cauldron": "Amulet Imbuement",
-  "gui.salem.spell_cauldron.spell_casting": "Amulet Installment"
+  "gui.salem.spell_cauldron.spell_casting": "Amulet Installment",
+
+  "tooltip.salem.spell_caster.energy": "Energy"
 }
