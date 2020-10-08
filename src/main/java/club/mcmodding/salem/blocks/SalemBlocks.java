@@ -2,6 +2,7 @@ package club.mcmodding.salem.blocks;
 
 import club.mcmodding.salem.Salem;
 import club.mcmodding.salem.blocks.spell_cauldron.SpellCauldron;
+import club.mcmodding.salem.items.SalemItems;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -14,7 +15,7 @@ public class SalemBlocks {
     public static final Block SPELL_CAULDRON = registerBlockGeneral(new SpellCauldron(), "spell_cauldron");
 
     private static Block registerBlockGeneral(Block block, String name) {
-        Registry.register(Registry.ITEM, new Identifier(Salem.MOD_ID, name), new BlockItem(block, new FabricItemSettings()));
+        Registry.register(Registry.ITEM, new Identifier(Salem.MOD_ID, name), new BlockItem(block, new FabricItemSettings().group(SalemItems.SALEM_GROUP)));
         return Registry.register(Registry.BLOCK, new Identifier(Salem.MOD_ID, name), block);
     }
 
