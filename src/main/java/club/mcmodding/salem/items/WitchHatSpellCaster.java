@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 public class WitchHatSpellCaster extends Item implements SpellCaster {
 
     public WitchHatSpellCaster(Settings settings) {
-        super(settings);
+        super(settings.maxCount(1));
     }
 
     @Override
