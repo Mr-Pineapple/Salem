@@ -40,7 +40,7 @@ public class SpellCasterUtil {
     }
 
     public static float getEnergy(ItemStack stack) {
-        return stack.getItem() instanceof SpellCaster ? getOrCreateTag(stack).getFloat("energy") : 0f;
+        return stack.getItem() instanceof SpellCaster ? getOrPopulateTag(stack).getFloat("energy") : 0f;
     }
 
     /**
