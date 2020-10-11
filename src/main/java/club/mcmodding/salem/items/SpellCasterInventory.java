@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 public class SpellCasterInventory implements Inventory {
 
     private ItemStackList INVENTORY = new ItemStackList(30);
+    private int effectiveSize = 0;
 
     @Override
     public int size() {
@@ -60,7 +61,15 @@ public class SpellCasterInventory implements Inventory {
     }
 
     public void deserialize(CompoundTag tag) {
-        INVENTORY.deserialize(tag);
+        INVENTORY.deserialize(tag, true);
+    }
+
+    public void setEffectiveSize(int effectiveSize) {
+        this.effectiveSize = effectiveSize;
+    }
+
+    public int getEffectiveSize() {
+        return effectiveSize;
     }
 
     public CompoundTag serialize() {

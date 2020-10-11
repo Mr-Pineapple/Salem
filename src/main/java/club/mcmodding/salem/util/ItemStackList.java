@@ -122,7 +122,11 @@ public class ItemStackList implements ItemStackInventory {
 
     @Override
     public void deserialize(CompoundTag tag) {
-        list = DefaultedList.ofSize(tag.contains("size") ? tag.getInt("size") : list.size(), ItemStack.EMPTY);
+        deserialize(tag, false);
+    }
+
+    public void deserialize(CompoundTag tag, boolean ignoreSize) {
+        list = DefaultedList.ofSize(tag.contains("size") && !ignoreSize ? tag.getInt("size") : list.size(), ItemStack.EMPTY);
         if (!tag.contains("stacks")) return;
 
         ListTag stacks = tag.getList("stacks", 10);

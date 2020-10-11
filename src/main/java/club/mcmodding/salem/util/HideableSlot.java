@@ -8,9 +8,11 @@ import net.minecraft.screen.slot.Slot;
 public class HideableSlot extends Slot {
 
     private boolean shown = true;
+    private int index = 0;
 
     public HideableSlot(Inventory inventory, int index, int x, int y) {
         super(inventory, index, x, y);
+        this.index = index;
     }
 
     public HideableSlot(Inventory inventory, int index, int x, int y, boolean shown) {
@@ -40,6 +42,10 @@ public class HideableSlot extends Slot {
     @Override
     public boolean canTakeItems(PlayerEntity playerEntity) {
         return shown && super.canTakeItems(playerEntity);
+    }
+
+    public int getIndex() {
+        return index;
     }
 
 }

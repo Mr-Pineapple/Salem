@@ -41,6 +41,12 @@ public class SpellCauldronScreen extends HandledScreen<SpellCauldronScreenHandle
         client.getTextureManager().bindTexture(TEXTURE);
 
         drawTexture(matrices, x.get(), y.get(), getZOffset(), 0, 0, backgroundWidth, backgroundHeight, 256, 512);
+
+        for (int j = 0; j < 6; j++) {
+            for (int i = 0; i < 5; i++) {
+                if ((j * 5) + i < handler.getEffectiveSize()) drawTexture(matrices, x.get() + 7 + 18 * i, y.get() + 17 + 18 * j, getZOffset(), 302, 0, 18, 18, 256, 512);
+            }
+        }
     }
 
     @Override

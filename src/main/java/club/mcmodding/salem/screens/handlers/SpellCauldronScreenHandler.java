@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
@@ -19,6 +20,7 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
     private final SpellCasterInventory spellCasterInventory = new SpellCasterInventory();
 
     private final PlayerInventory playerInventory;
+    private int effectiveSize = 0;
 
     public SpellCauldronScreenHandler(int syncID, PlayerInventory playerInventory) {
         this(syncID, playerInventory, new SpellCauldronInventory());
@@ -35,10 +37,11 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
         addSlot(new Slot(inventory, 0, 44, 138) {
             @Override
             public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
-                if (stack.getItem() instanceof SpellCaster) {
+                if (stack.getItem() instanceof SpellCaster)
                     SpellCasterUtil.getOrPopulateTag(stack).put("inventory", spellCasterInventory.serialize());
-                    spellCasterInventory.clear();
-                }
+
+                spellCasterInventory.clear();
+                setEffectiveSize(0);
 
                 return super.onTakeItem(player, stack);
             }
@@ -46,10 +49,12 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
             @Override
             public void setStack(ItemStack stack) {
                 super.setStack(stack);
+                CompoundTag tag = SpellCasterUtil.getOrPopulateTag(stack);
 
                 if (stack.getItem() instanceof SpellCaster) {
                     if (SpellCasterUtil.getOrPopulateTag(stack).get("inventory") != null) {
                         spellCasterInventory.deserialize(SpellCasterUtil.getOrPopulateTag(stack).getCompound("inventory"));
+                        setEffectiveSize(tag.contains("size") ? tag.getInt("size") : 30);
                     }
                 }
             }
@@ -57,10 +62,12 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
             @Override
             public void onStackChanged(ItemStack originalItem, ItemStack itemStack) {
                 super.onStackChanged(originalItem, itemStack);
+                CompoundTag tag = SpellCasterUtil.getOrPopulateTag(itemStack);
 
                 if (itemStack.getItem() instanceof SpellCaster) {
                     if (SpellCasterUtil.getOrPopulateTag(itemStack).get("inventory") != null) {
                         spellCasterInventory.deserialize(SpellCasterUtil.getOrPopulateTag(itemStack).getCompound("inventory"));
+                        setEffectiveSize(tag.contains("size") ? tag.getInt("size") : 30);
                     }
                 }
             }
@@ -77,6 +84,21 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
         }
 
         layoutPlayerInventory(playerInventory, 102, 92);
+    }
+
+    private void setEffectiveSize(int size) {
+        effectiveSize = size;
+
+        slots.stream().filter(slot -> slot.inventory instanceof SpellCasterInventory).forEach(s -> {
+            if (s instanceof HideableSlot) {
+                HideableSlot slot = (HideableSlot) s;
+                slot.setShown(slot.getIndex() < effectiveSize);
+            }
+        });
+    }
+
+    public int getEffectiveSize() {
+        return effectiveSize;
     }
 
     @Override
