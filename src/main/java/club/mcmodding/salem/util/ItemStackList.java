@@ -105,6 +105,10 @@ public class ItemStackList implements ItemStackInventory {
 
     @Override
     public CompoundTag serialize() {
+        return serialize(true);
+    }
+
+    public CompoundTag serialize(boolean writeSize) {
         ListTag stacks = new ListTag();
 
         for (int i = 0; i < list.size(); i++) {
@@ -115,7 +119,7 @@ public class ItemStackList implements ItemStackInventory {
 
         CompoundTag tag = new CompoundTag();
         tag.put("stacks", stacks);
-        tag.putInt("size", list.size());
+        if (writeSize) tag.putInt("size", list.size());
 
         return tag;
     }

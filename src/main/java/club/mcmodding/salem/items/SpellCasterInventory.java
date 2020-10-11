@@ -73,7 +73,7 @@ public class SpellCasterInventory implements Inventory {
     }
 
     public CompoundTag serialize() {
-        return INVENTORY.serialize();
+        return INVENTORY.serialize(false);
     }
 
 }

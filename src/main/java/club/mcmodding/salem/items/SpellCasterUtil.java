@@ -88,7 +88,12 @@ public class SpellCasterUtil {
         tag = new CompoundTag();
         stack.setTag(tag);
 
-        tag.put("inventory", new CompoundTag());
+        ListTag stacks = new ListTag();
+        CompoundTag inv = new CompoundTag();
+        inv.put("stacks", stacks);
+        tag.putInt("size", stack.getItem() instanceof SpellCaster ? ((SpellCaster) stack.getItem()).getCapacity() : 30);
+        tag.put("inventory", inv);
+
         tag.putInt("index", 0);
         tag.putFloat("energy", 0f);
 

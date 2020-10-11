@@ -54,7 +54,8 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
                 if (stack.getItem() instanceof SpellCaster) {
                     if (SpellCasterUtil.getOrPopulateTag(stack).get("inventory") != null) {
                         spellCasterInventory.deserialize(SpellCasterUtil.getOrPopulateTag(stack).getCompound("inventory"));
-                        setEffectiveSize(tag.contains("size") ? tag.getInt("size") : 30);
+                        setEffectiveSize(tag.contains("inventory") && tag.getCompound("inventory").contains("size") ?
+                                tag.getCompound("inventory").getInt("size") : 30);
                     }
                 }
             }
