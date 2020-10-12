@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "salem:block/spell_cauldron"
+        }
+    }
+}
