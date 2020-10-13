@@ -2,6 +2,7 @@ package club.mcmodding.salem;
 
 import club.mcmodding.salem.blocks.BlockEntities;
 import club.mcmodding.salem.blocks.SalemBlocks;
+import club.mcmodding.salem.recipes.Recipes;
 import club.mcmodding.salem.screens.Screens;
 import club.mcmodding.salem.items.SalemItems;
 import club.mcmodding.salem.screens.SpellPickerScreen;
@@ -27,6 +28,7 @@ public class Salem implements ModInitializer {
         SalemBlocks.init();
         BlockEntities.init();
         Screens.init();
+        Recipes.init();
 
         //TODO: Move this to an external place ie. PacketUtil
         ServerSidePacketRegistry.INSTANCE.register(OPEN_SPELL_WINDOW_ID, ((packetContext, attachedData) -> {

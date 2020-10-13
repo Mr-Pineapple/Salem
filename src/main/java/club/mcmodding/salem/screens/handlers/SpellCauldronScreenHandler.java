@@ -1,6 +1,7 @@
 package club.mcmodding.salem.screens.handlers;
 
 import club.mcmodding.salem.blocks.spell_cauldron.SpellCauldronInventory;
+import club.mcmodding.salem.items.Amulet;
 import club.mcmodding.salem.screens.Screens;
 import club.mcmodding.salem.items.SpellCaster;
 import club.mcmodding.salem.items.SpellCasterInventory;
@@ -47,6 +48,11 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
                 super.setStack(stack);
 
                 onInsert(stack);
+            }
+
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return super.canInsert(stack) && stack.getItem() instanceof Amulet;
             }
         });
         addSlot(new Slot(inventory, 1, 174, 44));
