@@ -14,6 +14,7 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -23,46 +24,30 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class SpellRecipe implements Recipe<SpellCauldronInventory> {
 
-    private final int clay;
-
-    private final HashMap<Item, Ingredient> outputs;
-    private final int time;
+    private final Identifier outputSpell;
+    private final DefaultedList<Ingredient> input;
 
     private final Identifier id;
 
-    public SpellRecipe(int clay, int time, HashMap<Item, Ingredient> outputs, Identifier id) {
-        this.clay = clay;
-
-        this.outputs = outputs;
-        this.time = time;
+    public SpellRecipe(Identifier output, DefaultedList<Ingredient> input, Identifier id) {
+        this.input = input;
+        this.outputSpell = output;
 
         this.id = id;
     }
 
-    public Ingredient getOutput(Item dye) {
-        if (outputs.containsKey(dye)) return outputs.get(dye);
-        if (outputs.containsKey(Items.AIR)) return outputs.get(Items.AIR);
-        return Ingredient.EMPTY;
+    public DefaultedList<Ingredient> getInput() {
+        return input;
     }
 
-    public HashMap<Item, Ingredient> getOutputs() {
-        return outputs;
+    public Identifier getOutputSpell() {
+        return outputSpell;
     }
-
-    public int getClay() {
-        return clay;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
 
     @Override
     public boolean matches(SpellCauldronInventory inv, World world) {
-        return inv.size() >= 2;
+        return inv.size() >= 20;
     }
-
 
     @Override
     public RecipeSerializer<?> getSerializer() {
@@ -91,7 +76,7 @@ public class SpellRecipe implements Recipe<SpellCauldronInventory> {
             }
             if (!containsEmpty) throw new JsonSyntaxException("Pottery recipe \"" + id.toString() + "\" missing empty \"\" result asstribute.");
 
-            return new SpellRecipe(recipeJSON.clay, recipeJSON.revolutions, outputs, id);
+            return new SpellRecipe(output, input, id);
         }
 
         @Override
