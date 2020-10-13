@@ -1,12 +1,10 @@
-package club.mcmodding.salem.screens.handlers;
+package club.mcmodding.salem.items.spell_caster;
 
-import club.mcmodding.salem.blocks.spell_cauldron.SpellCauldronInventory;
-import club.mcmodding.salem.screens.Screens;
+import club.mcmodding.salem.Screens;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.ScreenHandlerType;
 
 public class SpellPickerScreenHandler extends ScreenHandler {
 

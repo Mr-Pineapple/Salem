@@ -1,4 +1,4 @@
-package club.mcmodding.salem.items;
+package club.mcmodding.salem.items.spell_caster;
 
 import club.mcmodding.salem.util.ItemStackList;
 import net.minecraft.entity.player.PlayerEntity;

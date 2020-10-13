@@ -1,7 +1,6 @@
-package club.mcmodding.salem.screens;
+package club.mcmodding.salem.items.spell_caster;
 
 import club.mcmodding.salem.Salem;
-import club.mcmodding.salem.screens.handlers.SpellPickerScreenHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

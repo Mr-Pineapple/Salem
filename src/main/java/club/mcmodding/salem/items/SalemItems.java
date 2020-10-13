@@ -1,6 +1,7 @@
 package club.mcmodding.salem.items;
 
 import club.mcmodding.salem.Salem;
+import club.mcmodding.salem.items.spell_caster.WitchHatSpellCaster;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;

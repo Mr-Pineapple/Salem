@@ -1,11 +1,12 @@
-package club.mcmodding.salem.screens.handlers;
+package club.mcmodding.salem.blocks.spell_cauldron;
 
-import club.mcmodding.salem.blocks.spell_cauldron.SpellCauldronInventory;
 import club.mcmodding.salem.items.Amulet;
-import club.mcmodding.salem.screens.Screens;
-import club.mcmodding.salem.items.SpellCaster;
-import club.mcmodding.salem.items.SpellCasterInventory;
-import club.mcmodding.salem.items.SpellCasterUtil;
+import club.mcmodding.salem.Screens;
+import club.mcmodding.salem.items.spell_caster.SpellCaster;
+import club.mcmodding.salem.items.spell_caster.SpellCasterInventory;
+import club.mcmodding.salem.items.spell_caster.SpellCasterUtil;
+import club.mcmodding.salem.recipes.Recipes;
+import club.mcmodding.salem.recipes.SpellRecipe;
 import club.mcmodding.salem.util.HideableSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,6 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
 
 public class SpellCauldronScreenHandler extends ScreenHandler {
 
@@ -154,6 +158,13 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
     @Override
     public void onContentChanged(Inventory inventory) {
         super.onContentChanged(inventory);
+    }
+
+    public ArrayList<SpellRecipe> getRecipes() {
+        World world = playerInventory.player.world;
+        return playerInventory.player.world == null ? new ArrayList<>(
+               playerInventory.player.world.getRecipeManager().getAllMatches(Recipes.SPELL_TYPE, (SpellCauldronInventory) inventory, playerInventory.player.world)
+        ) : new ArrayList<>();
     }
 
 }

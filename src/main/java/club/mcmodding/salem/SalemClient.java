@@ -1,6 +1,5 @@
 package club.mcmodding.salem;
 
-import club.mcmodding.salem.screens.Screens;
 import club.mcmodding.salem.util.KeybindUtil;
 import net.fabricmc.api.ClientModInitializer;
 

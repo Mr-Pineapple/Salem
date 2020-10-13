@@ -1,8 +1,8 @@
 package club.mcmodding.salem.util;
 
 import club.mcmodding.salem.Salem;
-import club.mcmodding.salem.items.SpellCaster;
-import club.mcmodding.salem.screens.SpellPickerScreen;
+import club.mcmodding.salem.items.spell_caster.SpellCaster;
+import club.mcmodding.salem.items.spell_caster.SpellPickerScreen;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;

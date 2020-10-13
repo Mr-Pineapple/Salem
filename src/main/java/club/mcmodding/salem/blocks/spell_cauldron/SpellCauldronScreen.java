@@ -1,7 +1,6 @@
-package club.mcmodding.salem.screens;
+package club.mcmodding.salem.blocks.spell_cauldron;
 
 import club.mcmodding.salem.Salem;
-import club.mcmodding.salem.screens.handlers.SpellCauldronScreenHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;

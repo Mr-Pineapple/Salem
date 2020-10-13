@@ -1,14 +1,10 @@
-package club.mcmodding.salem.items;
+package club.mcmodding.salem.items.spell_caster;
 
 import club.mcmodding.salem.spells.Spell;
-import club.mcmodding.salem.spells.SpellRegistry;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;

@@ -1,8 +1,10 @@
-package club.mcmodding.salem.screens;
+package club.mcmodding.salem;
 
 import club.mcmodding.salem.Salem;
-import club.mcmodding.salem.screens.handlers.SpellCauldronScreenHandler;
-import club.mcmodding.salem.screens.handlers.SpellPickerScreenHandler;
+import club.mcmodding.salem.blocks.spell_cauldron.SpellCauldronScreen;
+import club.mcmodding.salem.items.spell_caster.SpellPickerScreen;
+import club.mcmodding.salem.blocks.spell_cauldron.SpellCauldronScreenHandler;
+import club.mcmodding.salem.items.spell_caster.SpellPickerScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
