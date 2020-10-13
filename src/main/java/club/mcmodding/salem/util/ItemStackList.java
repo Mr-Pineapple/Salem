@@ -105,13 +105,13 @@ public class ItemStackList implements ItemStackInventory {
 
     @Override
     public CompoundTag serialize() {
-        return serialize(true);
+        return serialize(list.size());
     }
 
-    public CompoundTag serialize(boolean writeSize) {
+    public CompoundTag serialize(int size) {
         ListTag stacks = new ListTag();
 
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < size && i < list.size(); i++) {
             CompoundTag itemTag = new CompoundTag();;
             list.get(i).toTag(itemTag);
             stacks.add(i, itemTag);
@@ -119,23 +119,23 @@ public class ItemStackList implements ItemStackInventory {
 
         CompoundTag tag = new CompoundTag();
         tag.put("stacks", stacks);
-        if (writeSize) tag.putInt("size", list.size());
+        tag.putInt("size", size);
 
         return tag;
     }
 
     @Override
     public void deserialize(CompoundTag tag) {
-        deserialize(tag, false);
+        deserialize(tag, tag.contains("size") ? tag.getInt("size") : list.size());
     }
 
-    public void deserialize(CompoundTag tag, boolean ignoreSize) {
-        list = DefaultedList.ofSize(tag.contains("size") && !ignoreSize ? tag.getInt("size") : list.size(), ItemStack.EMPTY);
+    public void deserialize(CompoundTag tag, int size) {
+        list = DefaultedList.ofSize(size, ItemStack.EMPTY);
         if (!tag.contains("stacks")) return;
 
         ListTag stacks = tag.getList("stacks", 10);
 
-        for (int i = 0; i < stacks.size(); i++) list.set(i, ItemStack.fromTag(stacks.getCompound(i)));
+        for (int i = 0; i < size; i++) list.set(i, i >= list.size() ? ItemStack.EMPTY : ItemStack.fromTag(stacks.getCompound(i)));
     }
 
     @Override

@@ -38,7 +38,7 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
             @Override
             public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
                 if (stack.getItem() instanceof SpellCaster)
-                    SpellCasterUtil.getOrPopulateTag(stack).put("inventory", spellCasterInventory.serialize());
+                    SpellCasterUtil.getOrPopulateTag(stack).put("inventory", spellCasterInventory.serialize(effectiveSize));
 
                 spellCasterInventory.clear();
                 setEffectiveSize(0);
