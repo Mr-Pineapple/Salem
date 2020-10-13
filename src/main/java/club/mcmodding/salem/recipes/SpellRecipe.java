@@ -1,10 +1,7 @@
 package club.mcmodding.salem.recipes;
 
 import club.mcmodding.salem.blocks.spell_cauldron.SpellCauldronInventory;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -14,6 +11,7 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -24,24 +22,24 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class SpellRecipe implements Recipe<SpellCauldronInventory> {
 
-    private final Identifier outputSpell;
-    private final DefaultedList<Ingredient> input;
+    private final DefaultedList<Ingredient> inputs;
+    private final HashMap<Item, Identifier> outputs;
 
     private final Identifier id;
 
-    public SpellRecipe(Identifier output, DefaultedList<Ingredient> input, Identifier id) {
-        this.input = input;
-        this.outputSpell = output;
+    public SpellRecipe(DefaultedList<Ingredient> inputs, HashMap<Item, Identifier> outputs, Identifier id) {
+        this.inputs = inputs;
+        this.outputs = outputs;
 
         this.id = id;
     }
 
-    public DefaultedList<Ingredient> getInput() {
-        return input;
+    public DefaultedList<Ingredient> getInputs() {
+        return inputs;
     }
 
-    public Identifier getOutputSpell() {
-        return outputSpell;
+    public HashMap<Item, Identifier> getOutputs() {
+        return outputs;
     }
 
     @Override
@@ -60,55 +58,62 @@ public class SpellRecipe implements Recipe<SpellCauldronInventory> {
         public SpellRecipe read(Identifier id, JsonObject json) {
             PotteryRecipeJSONFormat recipeJSON = new Gson().fromJson(json, PotteryRecipeJSONFormat.class);
 
-            if (recipeJSON.results == null) throw new JsonSyntaxException("Pottery recipe \"" + id.toString() + "\" missing \"results\" JSON attribute.");
-            if (recipeJSON.revolutions <= 0) throw new JsonSyntaxException("Pottery recipe \"" + id.toString() + "\" missing \"revolutions\" JSON attribute or \"revolutions\" JSON attribute is set to 0 or less.");
-            if (recipeJSON.clay <= 0) throw new JsonSyntaxException("Pottery recipe \"" + id.toString() + "\" missing \"clay\" JSON attribute or \"clay\" JSON attribute is set to 0 or less.");
+            if (recipeJSON.ingredients == null) throw new JsonSyntaxException("Spell recipe \"" + id.toString() + "\" missing \"ingredients\" attribute.");
+            if (recipeJSON.outputs == null) throw new JsonSyntaxException("Spell recipe \"" + id.toString() + "\" missing \"outputs\" attribute.");
 
-            HashMap<Item, Ingredient> outputs = new HashMap<>();
+            DefaultedList<Ingredient> ingredients = DefaultedList.of();
+            JsonArray inputsJsonArray = JsonHelper.asArray(recipeJSON.ingredients, "ingredients");
+
+            for (int i = 0; i < inputsJsonArray.size(); i++) {
+                Ingredient ingredient = Ingredient.fromJson(inputsJsonArray.get(i));
+                if (!ingredient.isEmpty()) {
+                    ingredients.add(ingredient);
+                }
+            }
+
+            HashMap<Item, Identifier> outputs = new HashMap<>();
 
             boolean containsEmpty = false;
-            for (Entry<String, JsonElement> object : recipeJSON.results.entrySet()) {
+            for (Entry<String, JsonElement> object : recipeJSON.outputs.entrySet()) {
                 AtomicReference<Item> item = new AtomicReference<>(Items.AIR);
                 Registry.ITEM.getOrEmpty(new Identifier(object.getKey())).ifPresent(item::set);
 
                 if (item.get() == Items.AIR) containsEmpty = true;
-                outputs.put(item.get(), Ingredient.fromJson(object.getValue()));
+                outputs.put(item.get(), new Identifier(object.getValue().getAsString()));
             }
-            if (!containsEmpty) throw new JsonSyntaxException("Pottery recipe \"" + id.toString() + "\" missing empty \"\" result asstribute.");
+            if (!containsEmpty) throw new JsonSyntaxException("Spell recipe \"" + id.toString() + "\" missing empty \"\" outputs asstribute.");
 
-            return new SpellRecipe(output, input, id);
+            return new SpellRecipe(ingredients, outputs, id);
         }
 
         @Override
         public void write(PacketByteBuf buf, SpellRecipe recipe) {
-            buf.writeInt(recipe.getClay());
-            buf.writeInt(recipe.getTime());
+            buf.writeInt(recipe.getInputs().size());
+            for (Ingredient ingredient : recipe.getInputs()) ingredient.write(buf);
 
             buf.writeInt(recipe.getOutputs().size());
-            for (Entry<Item, Ingredient> entry : recipe.getOutputs().entrySet()) {
+            for (Entry<Item, Identifier> entry : recipe.getOutputs().entrySet()) {
                 buf.writeItemStack(new ItemStack(entry.getKey()));
-                entry.getValue().write(buf);
+                buf.writeString(entry.getValue().toString());
             }
         }
 
         @Override
         public SpellRecipe read(Identifier id, PacketByteBuf buf) {
-            int clay = buf.readInt();
-            int time = buf.readInt();
+            DefaultedList<Ingredient> inputs = DefaultedList.of();
+            int inputsSize = buf.readInt();
+            for (int i = 0; i < inputsSize; i++) inputs.add(Ingredient.fromPacket(buf));
 
-            int size = buf.readInt();
-            HashMap<Item, Ingredient> map = new HashMap<>();
-            for (int i = 0; i < size; i++) {
-                map.put(buf.readItemStack().getItem(), Ingredient.fromPacket(buf));
-            }
+            HashMap<Item, Identifier> outputs = new HashMap<>();
+            int outputsSize = buf.readInt();
+            for (int i = 0; i < outputsSize; i++) outputs.put(buf.readItemStack().getItem(), new Identifier(buf.readString()));
 
-            return new SpellRecipe(clay, time, map, id);
+            return new SpellRecipe(inputs, outputs, id);
         }
 
         class PotteryRecipeJSONFormat {
-            int clay;
-            int revolutions;
-            JsonObject results;
+            JsonObject ingredients;
+            JsonObject outputs;
         }
 
         public static final Serializer INSTANCE = new Serializer();
