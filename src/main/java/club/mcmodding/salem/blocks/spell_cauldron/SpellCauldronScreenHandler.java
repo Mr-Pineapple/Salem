@@ -10,14 +10,21 @@ import club.mcmodding.salem.recipes.SpellRecipe;
 import club.mcmodding.salem.util.HideableSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
+import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class SpellCauldronScreenHandler extends ScreenHandler {
 
@@ -158,6 +165,26 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
     @Override
     public void onContentChanged(Inventory inventory) {
         super.onContentChanged(inventory);
+    }
+
+    protected static void updateResult(int syncId, World world, PlayerEntity player, SpellCauldronInventory inventory) {
+        if (!world.isClient) {
+            ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+            ItemStack itemStack = ItemStack.EMPTY;
+
+            Optional<SpellRecipe> optional = world.getServer().getRecipeManager().getFirstMatch(Recipes.SPELL_TYPE, inventory, world);
+
+            if (optional.isPresent()) {
+                SpellRecipe spellRecipe = optional.get();
+
+                if (inventory.shouldCraftRecipe(world, serverPlayerEntity, spellRecipe)) {
+                    itemStack = spellRecipe.craft(inventory);
+                }
+            }
+
+            inventory.setStack(2, itemStack);
+            serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, 0, itemStack));
+        }
     }
 
     public ArrayList<SpellRecipe> getRecipes() {
