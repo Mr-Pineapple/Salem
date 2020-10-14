@@ -81,7 +81,7 @@ public class SpellRecipe implements Recipe<SpellCauldronInventory> {
                 if (item.get() == Items.AIR) containsEmpty = true;
                 outputs.put(item.get(), new Identifier(object.getValue().getAsString()));
             }
-            if (!containsEmpty) throw new JsonSyntaxException("Spell recipe \"" + id.toString() + "\" missing empty \"\" outputs asstribute.");
+            if (!containsEmpty) throw new JsonSyntaxException("Spell recipe \"" + id.toString() + "\" missing empty \"\" outputs attribute.");
 
             return new SpellRecipe(ingredients, outputs, id);
         }
