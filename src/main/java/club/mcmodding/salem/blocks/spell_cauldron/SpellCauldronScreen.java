@@ -63,8 +63,6 @@ public class SpellCauldronScreen extends HandledScreen<SpellCauldronScreenHandle
 
         titleX = 102 + (162 - textRenderer.getWidth(title)) / 2;
         spellCastingTitleX = 8 + (90 - textRenderer.getWidth(spellCastingTitle)) / 2;
-        System.out.println((162 - textRenderer.getWidth(title)) / 2);
-        System.out.println((90 - textRenderer.getWidth(spellCastingTitle)) / 2);
     }
 
 }

@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -24,6 +25,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class SpellCauldronScreenHandler extends ScreenHandler {
@@ -40,7 +42,7 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
 
     public SpellCauldronScreenHandler(int syncID, PlayerInventory playerInventory, Inventory inventory) {
         super(Screens.SPELL_CAULDRON_SCREEN, syncID);
-        checkSize(inventory, 20);
+        checkSize(inventory, 22);
 
         this.inventory = inventory;
         this.playerInventory = playerInventory;
@@ -63,17 +65,57 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
 
             @Override
             public boolean canInsert(ItemStack stack) {
-                return super.canInsert(stack) && stack.getItem() instanceof Amulet;
+                return super.canInsert(stack) && stack.getItem() instanceof SpellCaster;
             }
         });
-        addSlot(new Slot(inventory, 1, 174, 44));
+        addSlot(new Slot(inventory, 1, 147, 44) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return super.canInsert(stack) && stack.getItem() instanceof Amulet;
+            }
 
-        for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i + 2 , 102 + 18 * i, 18));
-        for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i + 11, 102 + 18 * i, 70));
+            @Override
+            public void setStack(ItemStack stack) {
+                super.setStack(stack);
+
+                updateResult(syncID, playerInventory.player.world, playerInventory.player, (SpellCauldronInventory) inventory);
+            }
+        });
+        addSlot(new Slot(inventory, 2, 174, 44));
+        addSlot(new Slot(inventory, 3, 201, 44) {
+            @Override
+            public void setStack(ItemStack stack) {
+                super.setStack(stack);
+
+                updateResult(syncID, playerInventory.player.world, playerInventory.player, (SpellCauldronInventory) inventory);
+            }
+        });
+
+        for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i + 4 , 102 + 18 * i, 18) {
+            @Override
+            public void setStack(ItemStack stack) {
+                super.setStack(stack);
+
+                updateResult(syncID, playerInventory.player.world, playerInventory.player, (SpellCauldronInventory) inventory);
+            }
+        });
+        for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i + 13, 102 + 18 * i, 70) {
+            @Override
+            public void setStack(ItemStack stack) {
+                super.setStack(stack);
+
+                updateResult(syncID, playerInventory.player.world, playerInventory.player, (SpellCauldronInventory) inventory);
+            }
+        });
 
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 5; i++) {
-                addSlot(new HideableSlot(spellCasterInventory, (j * 5) + i, 8 + 18 * i, 18 + 18 * j));
+                addSlot(new HideableSlot(spellCasterInventory, (j * 5) + i, 8 + 18 * i, 18 + 18 * j) {
+                    @Override
+                    public boolean canInsert(ItemStack stack) {
+                        return super.canInsert(stack) && stack.getItem() instanceof Amulet;
+                    }
+                });
             }
         }
 
@@ -172,15 +214,9 @@ public class SpellCauldronScreenHandler extends ScreenHandler {
             ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
             ItemStack itemStack = ItemStack.EMPTY;
 
-            Optional<SpellRecipe> optional = world.getServer().getRecipeManager().getFirstMatch(Recipes.SPELL_TYPE, inventory, world);
+            List<SpellRecipe> spellRecipes = world.getServer().getRecipeManager().getAllMatches(Recipes.SPELL_TYPE, inventory, world);
+            
 
-            if (optional.isPresent()) {
-                SpellRecipe spellRecipe = optional.get();
-
-                if (inventory.shouldCraftRecipe(world, serverPlayerEntity, spellRecipe)) {
-                    itemStack = spellRecipe.craft(inventory);
-                }
-            }
 
             inventory.setStack(2, itemStack);
             serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, 0, itemStack));

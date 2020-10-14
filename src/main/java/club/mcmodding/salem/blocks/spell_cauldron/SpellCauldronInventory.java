@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 
 public class SpellCauldronInventory implements Inventory {
 
-    private ItemStackList INVENTORY = new ItemStackList(20);
+    private ItemStackList INVENTORY = new ItemStackList(22);
 
     @Override
     public int size() {
